@@ -37,17 +37,15 @@ def print_board(board):
 def is_game_over(board, winning_combo):
     ''' '''
     for combo in winning_combo:
-        if board[combo[0]] == board[combo[1]]:
-            if board[combo[1]] == board[combo[2]]:
-                if board[combo[1]] == 'X':
-                    print('Player 1 won!')
-                else:
-                    print('Player 2 won!')
-                return True
-            return False
-        return False
-    # return which player won.
-            
+        sample = board[combo[0]]
+        if sample == board[combo[0]] and sample == board[combo[1]] and sample == board[combo[2]]:
+            if sample == 'X':
+                print('Player 1 has won!')
+            elif sample == 'O':
+                print('Player 2 has won!')
+                
+            return True
+    return False
 
 def main():
     ''' '''
@@ -61,9 +59,8 @@ def main():
              '6', '7', '8']
 
     player = 'Player 1'
-
+    print_board(board)
     while not is_game_won:
-        print_board(board)
 
         pos = int(input(player + ', ender index: '))
 
@@ -76,8 +73,6 @@ def main():
                 player = 'Player 1'
 
             is_game_won = is_game_over(board, winning_combo)
+            print_board(board)
                   
 main()
-
-    
-
