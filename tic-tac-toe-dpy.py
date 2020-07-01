@@ -1,6 +1,6 @@
 ttt_board = ['0', '1', '2',
-         '3', '4', '5',
-         '6', '7', '8']
+             '3', '4', '5',
+             '6', '7', '8']
 
 winning_combo = [(0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8),
                  (6, 4, 2), (3, 4, 5), (0, 1, 2), (6, 7, 8)]
@@ -52,14 +52,14 @@ def is_game_over(ctx, board, winning_combo):
     return False
 
 @bot.command()
-async def ttt(ctx, pos=10):
+async def ttt(ctx, pos=''):
     global ttt_board
     board = ttt_board
     global winning_combo
     global player
     
     try:
-        if pos == 10:
+        if pos == '':
             display = '```\n' + '+-----------+' + \
             '\n| ' + ' | '.join(board[0:3]) + ' |' + \
             '\n|---|---|---|' + \
@@ -72,8 +72,10 @@ async def ttt(ctx, pos=10):
         if pos == 'reset':
             await ctx.send('The board has been reset.')
             board = board = ['0', '1', '2','3', '4', '5','6', '7', '8']
+            ttt_board = board
             return board
-        pos = int(pos)
+        else:
+            pos = int(pos)
     except ValueError:
         await ctx.send('Sorry, only numbers are accepted.')
         return
@@ -100,15 +102,22 @@ async def ttt(ctx, pos=10):
         is_game_won = is_game_over(ctx, board, winning_combo)
         if type(is_game_won) is not bool:
             await ctx.send(is_game_won)
+            board = ['0', '1', '2','3', '4', '5','6', '7', '8']
+            ttt_board = board
             return board
             
         valid = valid_moves(board)
         if len(valid) == 0:
             await ctx.send('No one won. Resetting board...')
             board = ['0', '1', '2','3', '4', '5','6', '7', '8']
+            ttt_board = board
             return board
 
-    msg = 'It is ' + player + "'s turn."
-    await ctx.send(msg)
-    return player
-    return board
+        msg = 'It is ' + player + "'s turn."
+        await ctx.send(msg)
+        return player
+        return board
+
+    if not is_valid_move(board, pos, player):
+        await ctx.send('Sorry, that move is either out of bounds, or someone is already occuping that space.')
+        return
