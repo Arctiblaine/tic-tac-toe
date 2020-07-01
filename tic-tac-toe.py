@@ -1,10 +1,15 @@
-'''
-    Archie's Tic-Tac-Toe but it's in python.
-    6/29/2020
-    For Helpful Birb, hopefully.
-'''
+def valid_moves(board):
+    valid = []
+    for slots in board:
+        try:
+            slot = int(slots)
+            valid.append(slot)
+        except:
+            continue
+
+    return valid
+    
 def is_valid_move(board, pos, player):
-    ''' '''
     try:
         section = board[pos]
     except IndexError:
@@ -24,8 +29,6 @@ def move(board, pos, player):
     return board
 
 def print_board(board):
-    ''' '''
-    # should be like
     print('+-----------+\n', end='')
     print('| ', ' | '.join(board[0:3]), ' |', sep='')
     print('|---|---|---|') 
@@ -35,7 +38,6 @@ def print_board(board):
     print('+-----------+\n')
 
 def is_game_over(board, winning_combo):
-    ''' '''
     for combo in winning_combo:
         sample = board[combo[0]]
         if sample == board[combo[0]] and sample == board[combo[1]] and sample == board[combo[2]]:
@@ -45,10 +47,10 @@ def is_game_over(board, winning_combo):
                 print('Player 2 has won!')
                 
             return True
+        
     return False
 
 def main():
-    ''' '''
     is_game_won = False
     
     winning_combo = [(0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8),
@@ -60,6 +62,7 @@ def main():
 
     player = 'Player 1'
     print_board(board)
+    valid = valid_moves(board)
     while not is_game_won:
 
         pos = int(input(player + ', ender index: '))
@@ -73,6 +76,11 @@ def main():
                 player = 'Player 1'
 
             is_game_won = is_game_over(board, winning_combo)
+            valid = valid_moves(board)
+            if len(valid) == 0:
+                print('No one won.')
+                break
             print_board(board)
                   
-main()
+if __name__ == '__main__':
+    main()
